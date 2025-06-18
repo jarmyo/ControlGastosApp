@@ -1,7 +1,7 @@
 using ControlGastos.Domain.Interfaces;
 using System.ComponentModel;
 
-namespace ControlGastos.Mobile
+namespace ControlGastos.Mobile.ViewModels
 {
 public partial class DashboardViewModel
 {

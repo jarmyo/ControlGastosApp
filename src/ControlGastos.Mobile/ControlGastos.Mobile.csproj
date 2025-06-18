@@ -71,20 +71,16 @@
 	  <ProjectReference Include="..\ControlGastos.Application\ControlGastos.Application.csproj" />
 	  <ProjectReference Include="..\ControlGastos.Infrastructure\ControlGastos.Infrastructure.csproj" />
 	</ItemGroup>
-
 	<ItemGroup>
-	  <Compile Update="ExpensesPage.xaml.cs">
+	  <Compile Update="Views\DashboardPage.xaml.cs">
+	    <DependentUpon>Views\DashboardPage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Update="Views\ExpensesPage.xaml.cs">
 	    <DependentUpon>ExpensesPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <MauiXaml Update="Dashboard.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="ExpensesPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	</ItemGroup>
 
 </Project>

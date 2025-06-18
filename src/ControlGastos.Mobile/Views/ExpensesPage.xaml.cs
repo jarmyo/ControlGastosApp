@@ -1,4 +1,4 @@
-namespace ControlGastos.Mobile;
+namespace ControlGastos.Mobile.Views;
 
 public partial class ExpensesPage : ContentPage
 {
