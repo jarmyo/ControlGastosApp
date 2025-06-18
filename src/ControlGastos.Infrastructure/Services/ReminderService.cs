@@ -75,7 +75,7 @@ namespace ControlGastos.Infrastructure.Services
                 .Where(x => x.Due >= today)
                 .ToList();
 
-            if (pendientes.Any())
+            if (pendientes.Count > 0)
             {
                 _logger.LogInformation("=== RECORDATORIO DE PAGOS PENDIENTES ===");
                 foreach (var p in pendientes)

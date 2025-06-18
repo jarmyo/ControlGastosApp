@@ -11,7 +11,7 @@ namespace ControlGastos.WebUI.Pages.Incomes
         private readonly IRecurringIncomeRepository _repo;
         public IndexModel(IRecurringIncomeRepository repo) => _repo = repo;
 
-        public IEnumerable<RecurringIncome> Incomes { get; private set; } = new List<RecurringIncome>();
+        public IEnumerable<RecurringIncome> Incomes { get; private set; } = [];
 
         public async Task OnGetAsync()
         {
