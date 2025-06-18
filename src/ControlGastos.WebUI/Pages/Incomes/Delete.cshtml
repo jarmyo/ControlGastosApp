@@ -1,0 +1,12 @@
+﻿@page "{id:int}"
+@model ControlGastos.WebUI.Pages.Incomes.DeleteModel
+
+<h1>Eliminar Ingreso</h1>
+
+<p>¿Estás seguro que deseas eliminar el ingreso <strong>"@Model.Name"</strong>?</p>
+
+<form method="post">
+    <input type="hidden" asp-for="IncomeId" />
+    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+</form>

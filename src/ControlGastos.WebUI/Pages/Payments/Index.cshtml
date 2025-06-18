@@ -1,0 +1,37 @@
+﻿@page
+@model ControlGastos.WebUI.Pages.Payments.IndexModel
+@{
+    ViewData["Title"] = "Pagos pendientes";
+}
+
+<h1>Pagos pendientes</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Monto</th>
+            <th>Fecha a pagar</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model.Pending)
+        {
+            <tr>
+                <td>@p.Name</td>
+                <td>@p.Type</td>
+                <td>
+                    @(p.Type == ExpenseType.Fixed ? $"{p.Fixed:C}" : $"~{p.Approx:C}")
+                </td>
+                <td>@p.DueDate:d</td>
+                <td>
+                    <a asp-page="Mark" asp-route-id="@p.Id" class="btn btn-sm btn-primary">
+                        Marcar pago
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

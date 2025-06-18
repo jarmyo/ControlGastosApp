@@ -1,0 +1,24 @@
+﻿@page "{id:int}"
+@model ControlGastos.WebUI.Pages.Payments.MarkModel
+@using ControlGastos.Domain.Entities
+@{
+    ViewData["Title"] = "Marcar pago";
+}
+
+<h1>Marcar pago de "@Model.Name"</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label">Fecha de pago</label>
+        <input class="form-control" value="@Model.DueDate:d" disabled />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PaidAmount" class="form-label">Monto pagado</label>
+        <input asp-for="PaidAmount" class="form-control" />
+        <span asp-validation-for="PaidAmount" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-page="/Dashboard/Index" class="btn btn-secondary">Cancelar</a>
+</form>

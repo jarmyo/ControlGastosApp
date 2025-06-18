@@ -1,0 +1,35 @@
+﻿@page
+@model ControlGastos.WebUI.Pages.Incomes.CreateModel
+@using ControlGastos.Domain.Entities
+@{
+    ViewData["Title"] = "Nuevo Ingreso";
+}
+
+<h1>Crear Ingreso Recurrente</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Income.Name" class="form-label">Nombre</label>
+        <input asp-for="Income.Name" class="form-control" />
+        <span asp-validation-for="Income.Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Income.FixedAmount" class="form-label">Monto</label>
+        <input asp-for="Income.FixedAmount" class="form-control" />
+        <span asp-validation-for="Income.FixedAmount" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Income.DayOfIncome" class="form-label">Día de cobro</label>
+        <input asp-for="Income.DayOfIncome" type="number" min="1" max="31" class="form-control" />
+        <span asp-validation-for="Income.DayOfIncome" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
