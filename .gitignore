@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/ControlGastos
+/src/ControlGastos.Application/bin/Debug/net9.0
+/src/ControlGastos.Application/obj
+/src/ControlGastos.Domain/bin/Debug/net9.0
+/src/ControlGastos.Domain/obj
