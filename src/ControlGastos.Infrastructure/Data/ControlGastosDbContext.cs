@@ -1,9 +1,11 @@
 ﻿using ControlGastos.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlGastos.Infrastructure.Data
 {
-    public class ControlGastosDbContext : DbContext
+    public class ControlGastosDbContext : IdentityDbContext<IdentityUser>
     {
         public ControlGastosDbContext(DbContextOptions<ControlGastosDbContext> options)
             : base(options)
