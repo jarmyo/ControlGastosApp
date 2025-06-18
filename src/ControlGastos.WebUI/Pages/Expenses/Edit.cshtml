@@ -5,6 +5,7 @@
 <h1>Editar Gasto</h1>
 
 <form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
     <input type="hidden" asp-for="Expense.Id" />
 
     <div class="mb-3">

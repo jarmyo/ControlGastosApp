@@ -1,5 +1,6 @@
 ﻿using ControlGastos.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -8,24 +9,17 @@ namespace ControlGastos.Infrastructure.Services
     public class ReminderService : BackgroundService
     {
         private readonly ILogger<ReminderService> _logger;
-        private readonly IRecurringExpenseRepository _expRepo;
-        private readonly IPaymentRepository _payRepo;
-        private readonly ICalendarService _calSvc;
+        private readonly IServiceScopeFactory _scopeFactory;
         private readonly int _hour;
         private readonly int _minute;
 
         public ReminderService(
             ILogger<ReminderService> logger,
-            IRecurringExpenseRepository expRepo,
-            IPaymentRepository payRepo,
-            ICalendarService calSvc,
+            IServiceScopeFactory scopeFactory,
             IConfiguration config)
         {
             _logger = logger;
-            _expRepo = expRepo;
-            _payRepo = payRepo;
-            _calSvc = calSvc;
-
+            _scopeFactory = scopeFactory;
             _hour = int.Parse(config["Reminder:Hour"]);
             _minute = int.Parse(config["Reminder:Minute"]);
         }
@@ -58,12 +52,17 @@ namespace ControlGastos.Infrastructure.Services
 
         private async Task SendRemindersAsync()
         {
+            using var scope = _scopeFactory.CreateScope();
+            var expRepo = scope.ServiceProvider.GetRequiredService<IRecurringExpenseRepository>();
+            var payRepo = scope.ServiceProvider.GetRequiredService<IPaymentRepository>();
+            var calSvc = scope.ServiceProvider.GetRequiredService<ICalendarService>();
+
             var today = DateTime.Today;
             var year = today.Year;
             var month = today.Month;
 
-            var all = await _expRepo.GetAllAsync();
-            var pagos = await _payRepo.GetByMonthAsync(year, month);
+            var all = await expRepo.GetAllAsync();
+            var pagos = await payRepo.GetByMonthAsync(year, month);
             var pagadasIds = pagos.Select(p => p.RecurringExpenseId).ToHashSet();
 
             var pendientes = all
@@ -71,9 +70,9 @@ namespace ControlGastos.Infrastructure.Services
                 .Select(e => new
                 {
                     e.Name,
-                    Due = _calSvc.AdjustPaymentDate(year, month, e.DayOfPayment)
+                    Due = calSvc.AdjustPaymentDate(year, month, e.DayOfPayment)
                 })
-                .Where(x => x.Due >= today)  // opcional: sólo futuras
+                .Where(x => x.Due >= today)
                 .ToList();
 
             if (pendientes.Any())

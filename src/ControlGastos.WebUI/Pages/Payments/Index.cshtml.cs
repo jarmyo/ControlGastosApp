@@ -8,23 +8,16 @@ using System.Threading.Tasks;
 
 namespace ControlGastos.WebUI.Pages.Payments
 {
-    public class IndexModel : PageModel
+    public class IndexModel(
+        IRecurringExpenseRepository expRepo,
+        IPaymentRepository payRepo,
+        ICalendarService calSvc) : PageModel
     {
-        private readonly IRecurringExpenseRepository _expRepo;
-        private readonly IPaymentRepository _payRepo;
-        private readonly ICalendarService _calSvc;
+        private readonly IRecurringExpenseRepository _expRepo = expRepo;
+        private readonly IPaymentRepository _payRepo = payRepo;
+        private readonly ICalendarService _calSvc = calSvc;
 
         public IEnumerable<PendingDto> Pending { get; private set; }
-
-        public IndexModel(
-            IRecurringExpenseRepository expRepo,
-            IPaymentRepository payRepo,
-            ICalendarService calSvc)
-        {
-            _expRepo = expRepo;
-            _payRepo = payRepo;
-            _calSvc = calSvc;
-        }
 
         public async Task OnGetAsync()
         {
@@ -36,15 +29,8 @@ namespace ControlGastos.WebUI.Pages.Payments
 
             Pending = all
                 .Where(e => !pagadas.Contains(e.Id))
-                .Select(e => new PendingDto
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Type = e.Type,
-                    Fixed = e.FixedAmount ?? 0,
-                    Approx = e.ApproximateAmount ?? 0,
-                    DueDate = _calSvc.AdjustPaymentDate(year, month, e.DayOfPayment)
-                });
+                .Select(e => new PendingDto(e.Id, e.Name, e.Type,
+                    e.FixedAmount ?? 0, e.ApproximateAmount ?? 0, _calSvc.AdjustPaymentDate(year, month, e.DayOfPayment)));
         }
 
         public record PendingDto(int Id, string Name, ExpenseType Type, decimal Fixed, decimal Approx, DateTime DueDate);

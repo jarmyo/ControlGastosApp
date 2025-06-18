@@ -2,10 +2,23 @@ html {
   font-size: 14px;
 }
 
+.card {
+    min-width: 250px;
+}
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
   }
+}
+
+
+
+/* Espaciado extra en móviles */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1rem;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {

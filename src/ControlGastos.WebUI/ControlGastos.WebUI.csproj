@@ -15,7 +15,8 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <Nullable>warnings</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 

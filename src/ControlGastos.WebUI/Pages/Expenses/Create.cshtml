@@ -8,6 +8,7 @@
 <h1>Crear Gasto Recurrente</h1>
 
 <form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
         <label asp-for="Expense.Name" class="form-label">Nombre</label>
         <input asp-for="Expense.Name" class="form-control" />
