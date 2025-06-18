@@ -60,10 +60,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.6" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
-		<PackageReference Include="System.ObjectModel" Version="4.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -75,12 +75,14 @@
 	  <Compile Update="Views\DashboardPage.xaml.cs">
 	    <DependentUpon>Views\DashboardPage.xaml</DependentUpon>
 	  </Compile>
-	</ItemGroup>
-	<ItemGroup>
+	  <Compile Update="Views\IncomesPage.xaml.cs">
+	    <DependentUpon>IncomesPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\PaymentsPage.xaml.cs">
+	    <DependentUpon>Views\PaymentsPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\ExpensesPage.xaml.cs">
-	    <DependentUpon>ExpensesPage.xaml</DependentUpon>
+	    <DependentUpon>Views\ExpensesPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
-
-
 </Project>

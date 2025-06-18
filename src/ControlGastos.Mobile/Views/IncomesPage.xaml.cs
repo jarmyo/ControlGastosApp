@@ -2,11 +2,11 @@ using ControlGastos.Mobile.ViewModels;
 
 namespace ControlGastos.Mobile.Views;
 
-public partial class ExpensesPage : ContentPage
+public partial class IncomesPage : ContentPage
 {
-    ExpensesViewModel ViewModel => BindingContext as ExpensesViewModel;
+    IncomesViewModel ViewModel => BindingContext as IncomesViewModel;
 
-    public ExpensesPage(ExpensesViewModel viewModel)
+    public IncomesPage(IncomesViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

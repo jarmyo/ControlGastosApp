@@ -6,12 +6,20 @@
     xmlns:local="clr-namespace:ControlGastos.Mobile"
     xmlns:views="clr-namespace:ControlGastos.Mobile.Views"
     Title="ControlGastos.Mobile">
-    <ShellItem Title="Dashboard" Icon="dashboard.png">
+    <FlyoutItem Title="Dashboard" Icon="dashboard.png">
         <ShellContent ContentTemplate="{DataTemplate views:DashboardPage}" />
-    </ShellItem>
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Gastos" Icon="expenses.png">
+        <ShellContent ContentTemplate="{DataTemplate views:ExpensesPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Pagos" Icon="payments.png">
+        <ShellContent ContentTemplate="{DataTemplate views:PaymentsPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Ingresos" Icon="incomes.png">
+        <ShellContent ContentTemplate="{DataTemplate views:IncomesPage}" />
+    </FlyoutItem>
 
 </Shell>

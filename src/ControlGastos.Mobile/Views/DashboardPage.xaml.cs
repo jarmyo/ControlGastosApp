@@ -1,19 +1,20 @@
-
 using ControlGastos.Mobile.ViewModels;
 
 namespace ControlGastos.Mobile.Views
 {
     public partial class DashboardPage : ContentPage
     {
-        public DashboardPage()
+        DashboardViewModel ViewModel => BindingContext as DashboardViewModel;
+
+        public DashboardPage(DashboardViewModel viewModel)
         {
             InitializeComponent();
+            BindingContext = viewModel;
         }
-        public DashboardPage(DashboardViewModel vm)
+        protected override async void OnAppearing()
         {
-            InitializeComponent();
-            BindingContext = vm;
-            Loaded += async (_, __) => await vm.LoadAsync();
+            base.OnAppearing();
+            await ViewModel.LoadDataAsync();
         }
     }
 }

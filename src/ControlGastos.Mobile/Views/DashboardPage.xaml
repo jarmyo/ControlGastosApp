@@ -1,12 +1,71 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ControlGastos.Mobile.Views.DashboardPage"
-             Title="Dashboard">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+  xmlns:vm="clr-namespace:ControlGastos.Mobile.ViewModels"
+  Title="Dashboard">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Totales -->
+            <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto" RowSpacing="10" ColumnSpacing="10">
+                <Frame Grid.Column="0" CornerRadius="8" Padding="15" BackgroundColor="#2A9D8F">
+                    <VerticalStackLayout>
+                        <Label Text="Total ingresos" FontAttributes="Bold" TextColor="White" />
+                        <Label Text="{Binding TotalIncome, StringFormat='{}{0:C}'}"
+                   FontSize="24" HorizontalOptions="Center"
+                   TextColor="White" />
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame Grid.Column="1" CornerRadius="8" Padding="15" BackgroundColor="#227C9D">
+                    <VerticalStackLayout>
+                        <Label Text="Total pagado" FontAttributes="Bold" TextColor="White" />
+                        <Label Text="{Binding TotalPaid, StringFormat='{}{0:C}'}"
+                   FontSize="24" HorizontalOptions="Center"
+                   TextColor="White" />
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame Grid.Column="2" CornerRadius="8" Padding="15" BackgroundColor="#FE8A71">
+                    <VerticalStackLayout>
+                        <Label Text="Total pendiente" FontAttributes="Bold" TextColor="White" />
+                        <Label Text="{Binding TotalPending, StringFormat='{}{0:C}'}"
+                   FontSize="24" HorizontalOptions="Center"
+                   TextColor="White" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Pagos pendientes -->
+            <Label Text="Pagos pendientes" FontAttributes="Bold" FontSize="18" />
+            <CollectionView ItemsSource="{Binding PendingExpenses}"
+                      SelectionMode="None"
+                      ItemSizingStrategy="MeasureAllItems">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame CornerRadius="8" Padding="10" Margin="0,5" BorderColor="#DDD" HasShadow="True">
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                                <Label Grid.Row="0" Grid.Column="0"
+                       Text="{Binding Name}"
+                       FontAttributes="Bold" />
+                                <Button Grid.Row="0" Grid.Column="1"
+                        Text="Marcar"
+                        Command="{Binding Path=BindingContext.MarkCommand, Source={x:Reference Name=Page}}"
+                        CommandParameter="{Binding Id}"
+                        BackgroundColor="#227C9D"
+                        TextColor="White"
+                        CornerRadius="4"
+                        Padding="5,2" />
+                                <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                       Text="{Binding DueDate, StringFormat='Vence: {0:d} – {1:C}', ConverterParameter={Binding Amount}}"
+                       FontSize="12"
+                       TextColor="#555" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
