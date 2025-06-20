@@ -11,14 +11,55 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlGastos.Infrastructure.Migrations
 {
     [DbContext(typeof(ControlGastosDbContext))]
-    [Migration("20250618201909_MobileSchemaUpdate")]
-    partial class MobileSchemaUpdate
+    [Migration("20250620140840_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.6");
+
+            modelBuilder.Entity("ControlGastos.Domain.Entities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ColorHex")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("ControlGastos.Domain.Entities.ExpenseInstallment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RecurringExpenseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SequenceNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TotalSequences")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecurringExpenseId");
+
+                    b.ToTable("ExpenseInstallments");
+                });
 
             modelBuilder.Entity("ControlGastos.Domain.Entities.Payment", b =>
                 {
@@ -33,6 +74,9 @@ namespace ControlGastos.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("RecurringExpenseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("Sequence")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -51,20 +95,34 @@ namespace ControlGastos.Infrastructure.Migrations
                     b.Property<decimal?>("ApproximateAmount")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("DayOfPayment")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal?>("FixedAmount")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsDomiciled")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("TotalOccurrences")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("RecurringExpenses");
                 });
@@ -286,6 +344,17 @@ namespace ControlGastos.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ControlGastos.Domain.Entities.ExpenseInstallment", b =>
+                {
+                    b.HasOne("ControlGastos.Domain.Entities.RecurringExpense", "RecurringExpense")
+                        .WithMany()
+                        .HasForeignKey("RecurringExpenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RecurringExpense");
+                });
+
             modelBuilder.Entity("ControlGastos.Domain.Entities.Payment", b =>
                 {
                     b.HasOne("ControlGastos.Domain.Entities.RecurringExpense", "RecurringExpense")
@@ -295,6 +364,16 @@ namespace ControlGastos.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("RecurringExpense");
+                });
+
+            modelBuilder.Entity("ControlGastos.Domain.Entities.RecurringExpense", b =>
+                {
+                    b.HasOne("ControlGastos.Domain.Entities.Category", "Category")
+                        .WithMany("Expenses")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -346,6 +425,11 @@ namespace ControlGastos.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ControlGastos.Domain.Entities.Category", b =>
+                {
+                    b.Navigation("Expenses");
                 });
 #pragma warning restore 612, 618
         }

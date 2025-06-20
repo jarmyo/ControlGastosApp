@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ControlGastos.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class MobileSchemaUpdate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,35 @@ namespace ControlGastos.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    ColorHex = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecurringIncomes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    FixedAmount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    DayOfIncome = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecurringIncomes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -156,6 +185,76 @@ namespace ControlGastos.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "RecurringExpenses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false),
+                    FixedAmount = table.Column<decimal>(type: "TEXT", nullable: true),
+                    ApproximateAmount = table.Column<decimal>(type: "TEXT", nullable: true),
+                    DayOfPayment = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsDomiciled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Notes = table.Column<string>(type: "TEXT", nullable: true),
+                    TotalOccurrences = table.Column<int>(type: "INTEGER", nullable: true),
+                    CategoryId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecurringExpenses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecurringExpenses_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ExpenseInstallments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    RecurringExpenseId = table.Column<int>(type: "INTEGER", nullable: false),
+                    SequenceNumber = table.Column<int>(type: "INTEGER", nullable: false),
+                    TotalSequences = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExpenseInstallments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExpenseInstallments_RecurringExpenses_RecurringExpenseId",
+                        column: x => x.RecurringExpenseId,
+                        principalTable: "RecurringExpenses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    RecurringExpenseId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Amount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Sequence = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Payments_RecurringExpenses_RecurringExpenseId",
+                        column: x => x.RecurringExpenseId,
+                        principalTable: "RecurringExpenses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -192,6 +291,21 @@ namespace ControlGastos.Infrastructure.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExpenseInstallments_RecurringExpenseId",
+                table: "ExpenseInstallments",
+                column: "RecurringExpenseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_RecurringExpenseId",
+                table: "Payments",
+                column: "RecurringExpenseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecurringExpenses_CategoryId",
+                table: "RecurringExpenses",
+                column: "CategoryId");
         }
 
         /// <inheritdoc />
@@ -213,10 +327,25 @@ namespace ControlGastos.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ExpenseInstallments");
+
+            migrationBuilder.DropTable(
+                name: "Payments");
+
+            migrationBuilder.DropTable(
+                name: "RecurringIncomes");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "RecurringExpenses");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }
