@@ -6,6 +6,7 @@
 
 <form method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
+    <span asp-validation-for="Expense.TotalOccurrences" class="text-danger"></span>
     <input type="hidden" asp-for="Expense.Id" />
 
     <div class="mb-3">
@@ -37,7 +38,29 @@
         <input asp-for="Expense.DayOfPayment" type="number" min="1" max="31" class="form-control" />
         <span asp-validation-for="Expense.DayOfPayment" class="text-danger"></span>
     </div>
+    <div class="mb-3 form-check">
+        <input asp-for="Expense.IsDomiciled" class="form-check-input" />
+        <label asp-for="Expense.IsDomiciled" class="form-check-label">Domiciliado</label>
+    </div>
 
+    <div class="mb-3">
+        <label asp-for="Expense.Notes" class="form-label">Notas</label>
+        <textarea asp-for="Expense.Notes" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Expense.TotalOccurrences" class="form-label">
+            Total de pagos esperados (opcional)
+        </label>
+        <input asp-for="Expense.TotalOccurrences" type="number" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Expense.CategoryId" class="form-label">Categoría</label>
+        <select asp-for="Expense.CategoryId" class="form-select"
+                asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+            <option value="">— sin categoría —</option>
+        </select>
+    </div>
     <button type="submit" class="btn btn-primary">Guardar cambios</button>
     <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
 </form>

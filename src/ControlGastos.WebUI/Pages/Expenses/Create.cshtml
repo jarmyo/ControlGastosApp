@@ -38,7 +38,29 @@
         <input asp-for="Expense.DayOfPayment" class="form-control" type="number" min="1" max="31" />
         <span asp-validation-for="Expense.DayOfPayment" class="text-danger"></span>
     </div>
+    <div class="mb-3 form-check">
+        <input asp-for="Expense.IsDomiciled" class="form-check-input" />
+        <label asp-for="Expense.IsDomiciled" class="form-check-label">Domiciliado</label>
+    </div>
 
+    <div class="mb-3">
+        <label asp-for="Expense.Notes" class="form-label">Notas</label>
+        <textarea asp-for="Expense.Notes" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Expense.TotalOccurrences" class="form-label">
+            Total de pagos esperados (opcional)
+        </label>
+        <input asp-for="Expense.TotalOccurrences" type="number" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Expense.CategoryId" class="form-label">Categoría</label>
+        <select asp-for="Expense.CategoryId" class="form-select"
+                asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+            <option value="">— sin categoría —</option>
+        </select>
+    </div>
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
 </form>

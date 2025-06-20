@@ -8,24 +8,34 @@ using System.Threading.Tasks;
 
 namespace ControlGastos.WebUI.Pages.Dashboard
 {
-    public class IndexModel(
-        ICalculationService calcSvc,
-        IRecurringExpenseRepository expRepo,
-        IPaymentRepository payRepo,
-        ICalendarService calSvc,
-        IRecurringIncomeRepository incomeRepo) : PageModel
+    public class IndexModel : PageModel
     {
-        private readonly ICalculationService _calcSvc = calcSvc;
-        private readonly IRecurringExpenseRepository _expRepo = expRepo;
-        private readonly IPaymentRepository _payRepo = payRepo;
-        private readonly ICalendarService _calSvc = calSvc;
-        private readonly IRecurringIncomeRepository _incomeRepo = incomeRepo;
+        private readonly ICalculationService _calcSvc;
+        private readonly IRecurringExpenseRepository _expRepo;
+        private readonly IPaymentRepository _payRepo;
+        private readonly ICalendarService _calSvc;
+        private readonly IRecurringIncomeRepository _incomeRepo;
+
+        public IndexModel(
+            ICalculationService calcSvc,
+            IRecurringExpenseRepository expRepo,
+            IPaymentRepository payRepo,
+            ICalendarService calSvc,
+            IRecurringIncomeRepository incomeRepo)
+        {
+            _calcSvc = calcSvc;
+            _expRepo = expRepo;
+            _payRepo = payRepo;
+            _calSvc = calSvc;
+            _incomeRepo = incomeRepo;
+            PendingExpenses = [];
+        }
 
         public decimal TotalPaid { get; private set; }
         public decimal TotalPending { get; private set; }
         public decimal TotalIncome { get; private set; }
 
-        public IEnumerable<RecurringExpense>? PendingExpenses { get; private set; }
+        public IEnumerable<RecurringExpense> PendingExpenses { get; private set; }
         public DateTime AdjustedDate(int day) =>
             _calSvc.AdjustPaymentDate(DateTime.Today.Year, DateTime.Today.Month, day);
 

@@ -15,10 +15,34 @@ namespace ControlGastos.Infrastructure.Data
         public DbSet<RecurringExpense> RecurringExpenses { get; set; } = null!;
         public DbSet<Payment> Payments { get; set; } = null!;
         public DbSet<RecurringIncome> RecurringIncomes { get; set; } = null!;
-
+        public DbSet<Category> Categories { get; set; } = null!;
+        public DbSet<ExpenseInstallment> ExpenseInstallments { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            // Category
+            modelBuilder.Entity<Category>(e =>
+            {
+                e.HasKey(c => c.Id);
+                e.Property(c => c.Name).IsRequired();
+                e.Property(c => c.ColorHex).IsRequired();
+                e.HasMany(c => c.Expenses)
+                 .WithOne(x => x.Category!)
+                 .HasForeignKey(x => x.CategoryId)
+                 .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // ExpenseInstallment
+            modelBuilder.Entity<ExpenseInstallment>(e =>
+            {
+                e.HasKey(x => x.Id);
+                e.Property(x => x.SequenceNumber).IsRequired();
+                e.Property(x => x.TotalSequences).IsRequired();
+                e.HasOne(x => x.RecurringExpense)
+                 .WithMany() // o .WithMany(r=>r.Installments) si añades colección
+                 .HasForeignKey(x => x.RecurringExpenseId)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
 
             modelBuilder.Entity<RecurringExpense>(entity =>
             {
@@ -49,3 +73,4 @@ namespace ControlGastos.Infrastructure.Data
         }
     }
 }
+

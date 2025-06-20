@@ -29,6 +29,8 @@ namespace ControlGastos.WebUI
             builder.Services.AddScoped<ICalendarService, CalendarService>();
             builder.Services.AddScoped<ICalculationService, CalculationService>();
             builder.Services.AddScoped<IRecurringIncomeRepository, EfRecurringIncomeRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IExpenseInstallmentRepository, ExpenseInstallmentRepository>();
             builder.Services.AddHostedService<ReminderService>();
 
             // Add services to the container.

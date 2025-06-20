@@ -2,21 +2,18 @@
 
 namespace ControlGastos.Domain.Entities
 {
-    public class Payment
+    public class ExpenseInstallment
     {
         public int Id { get; set; }
 
+        // FK al gasto
         public int RecurringExpenseId { get; set; }
         public RecurringExpense RecurringExpense { get; set; } = null!;
 
-        // Fecha en la que se realizó el pago
-        public DateTime PaymentDate { get; set; }
-
-        // Monto exacto que se pagó
-        public decimal Amount { get; set; }
+        [Range(1, int.MaxValue)]
+        public int SequenceNumber { get; set; }
 
         [Range(1, int.MaxValue)]
-        public int? Sequence { get; set; }
+        public int TotalSequences { get; set; }
     }
 }
-

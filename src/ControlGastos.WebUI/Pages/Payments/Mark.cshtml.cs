@@ -12,7 +12,10 @@ namespace ControlGastos.WebUI.Pages.Payments
         private readonly IRecurringExpenseRepository _expRepo;
         private readonly IPaymentRepository _payRepo;
         private readonly ICalendarService _calSvc;
-
+        private readonly IExpenseInstallmentRepository _installRepo;
+        
+        
+        [BindProperty]
         public int ExpenseId { get; set; }
         public string Name { get; set; } = "";
         public ExpenseType Type { get; set; }
@@ -22,14 +25,22 @@ namespace ControlGastos.WebUI.Pages.Payments
         [BindProperty]
         public decimal PaidAmount { get; set; }
 
+        [BindProperty]
+        public int? Sequence { get; set; }
+
+        public List<int> SequenceOptions { get; private set; }
+        public int? TotalSequences { get; private set; }
+
         public MarkModel(
             IRecurringExpenseRepository expRepo,
             IPaymentRepository payRepo,
-            ICalendarService calSvc)
+            ICalendarService calSvc,
+            IExpenseInstallmentRepository installRepo)
         {
             _expRepo = expRepo;
             _payRepo = payRepo;
             _calSvc = calSvc;
+            _installRepo = installRepo;
         }
 
         public async Task<IActionResult> OnGetAsync(int id)
@@ -44,6 +55,10 @@ namespace ControlGastos.WebUI.Pages.Payments
             DueDate = _calSvc.AdjustPaymentDate(DateTime.Today.Year, DateTime.Today.Month, e.DayOfPayment);
             PaidAmount = Amount;
 
+            var installments = (await _installRepo.GetByExpenseAsync(id)).ToList();
+            SequenceOptions = installments.Select(x => x.SequenceNumber).ToList();
+            TotalSequences = installments.FirstOrDefault()?.TotalSequences;
+
             return Page();
         }
 
@@ -53,7 +68,8 @@ namespace ControlGastos.WebUI.Pages.Payments
             {
                 RecurringExpenseId = ExpenseId,
                 Amount = PaidAmount,
-                PaymentDate = DateTime.Today
+                PaymentDate = DateTime.Today,
+                Sequence = Sequence
             });
             return RedirectToPage("/Dashboard/Index");
         }

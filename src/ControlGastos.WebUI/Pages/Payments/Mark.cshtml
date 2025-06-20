@@ -8,6 +8,7 @@
 <h1>Marcar pago de "@Model.Name"</h1>
 
 <form method="post">
+    <input type="hidden" asp-for="ExpenseId" />
     <div class="mb-3">
         <label class="form-label">Fecha de pago</label>
         <input class="form-control" value="@Model.DueDate:d" disabled />
@@ -18,7 +19,20 @@
         <input asp-for="PaidAmount" class="form-control" />
         <span asp-validation-for="PaidAmount" class="text-danger"></span>
     </div>
-
+    @if (Model.SequenceOptions?.Any() == true)
+    {
+        <div class="mb-3">
+            <label asp-for="Sequence" class="form-label">Número de pago</label>
+            <select asp-for="Sequence" class="form-select">
+                <option value="">Selecciona...</option>
+                @foreach (var seq in Model.SequenceOptions)
+                {
+                    <option value="@seq">@seq de @Model.TotalSequences</option>
+                }
+            </select>
+            <span asp-validation-for="Sequence" class="text-danger"></span>
+        </div>
+    }
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a asp-page="/Dashboard/Index" class="btn btn-secondary">Cancelar</a>
 </form>

@@ -22,20 +22,6 @@
                 </button>  
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">  
                     <ul class="navbar-nav flex-grow-1">  
-                        @if (SignInManager.IsSignedIn(User))  
-                        {  
-                            <li class="nav-item">  
-                                <form method="post" asp-area="Identity" asp-page="/Account/Logout">  
-                                    <button type="submit" class="nav-link btn btn-link">Cerrar sesión</button>  
-                                </form>  
-                            </li>  
-                        }  
-                        else  
-                        {  
-                            <li class="nav-item">  
-                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Ingresar</a>  
-                            </li>  
-                        }  
                         <li class="nav-item">  
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>  
                         </li>  
@@ -52,7 +38,8 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Incomes/Index">Ingresos</a>  
                         </li>  
                     </ul>  
-                </div>  
+                </div>
+                <partial name="_LoginPartial" />
             </div>  
         </nav>  
     </header>  
